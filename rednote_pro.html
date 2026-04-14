@@ -1,0 +1,1915 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>红书创作大师 - RedNote Pro</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+    <script>
+        WebFont.load({
+            google: { families: ['Nunito:400,600,700', 'Noto Sans SC:400,500,700'] }
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --bg-primary: #FDF8F0;
+            --bg-secondary: #F5F0E8;
+            --bg-tertiary: #EDE8E0;
+            --text-primary: #4A4A4A;
+            --text-secondary: #7A7A7A;
+            --text-tertiary: #9A9A9A;
+            --accent-1: #E8B4B8;
+            --accent-2: #B8D4E3;
+            --accent-3: #F0D4A8;
+            --accent-4: #D4C4E0;
+            --accent-5: #F4B8A3;
+            --accent-6: #C8E6D5;
+            --accent-red: #ff4d4f;
+            --accent-green: #52c41a;
+            --accent-blue: #1890ff;
+            --border-light: #E8E3DB;
+            --border-medium: #D8D3CB;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', 'Nunito', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* 导航栏 */
+        .nav-bar {
+            height: 64px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-5));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .brand-text {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-red), var(--accent-5));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-tab {
+            padding: 8px 20px;
+            border-radius: var(--radius-full);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+        }
+
+        .nav-tab:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .nav-tab.active {
+            background: var(--accent-1);
+            color: white;
+        }
+
+        /* 主容器 */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        /* 功能卡片网格 */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            border-color: var(--accent-1);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+        .feature-card:nth-child(1) .feature-icon { background: var(--accent-1); }
+        .feature-card:nth-child(2) .feature-icon { background: var(--accent-2); }
+        .feature-card:nth-child(3) .feature-icon { background: var(--accent-3); }
+        .feature-card:nth-child(4) .feature-icon { background: var(--accent-4); }
+        .feature-card:nth-child(5) .feature-icon { background: var(--accent-5); }
+        .feature-card:nth-child(6) .feature-icon { background: var(--accent-6); }
+
+        .feature-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .feature-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* 诊断面板 */
+        .diagnose-panel {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+
+        .panel-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .panel-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--accent-red);
+            border-radius: 2px;
+        }
+
+        /* 输入区域 */
+        .input-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .input-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .input-field {
+            padding: 12px 16px;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--accent-1);
+            box-shadow: 0 0 0 3px rgba(232, 180, 184, 0.2);
+        }
+
+        textarea.input-field {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .category-select {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-full);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .category-btn:hover {
+            border-color: var(--accent-1);
+        }
+
+        .category-btn.active {
+            background: var(--accent-1);
+            color: white;
+            border-color: var(--accent-1);
+        }
+
+        /* 按钮 */
+        .btn-primary {
+            padding: 14px 32px;
+            background: linear-gradient(135deg, var(--accent-red), #ff7a7a);
+            color: white;
+            border: none;
+            border-radius: var(--radius-full);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255, 77, 79, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* 诊断进度 */
+        .diagnose-progress {
+            display: none;
+            margin-top: 32px;
+        }
+
+        .diagnose-progress.active {
+            display: block;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .progress-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .progress-time {
+            font-size: 14px;
+            color: var(--text-secondary);
+            background: var(--bg-tertiary);
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+        }
+
+        .steps-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .step-indicator {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 14px;
+            position: relative;
+        }
+
+        .step-item.completed .step-indicator {
+            background: var(--accent-green);
+            color: white;
+        }
+
+        .step-item.active .step-indicator {
+            background: var(--accent-red);
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 77, 79, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(255, 77, 79, 0); }
+        }
+
+        .step-line {
+            position: absolute;
+            left: 50%;
+            top: 100%;
+            width: 2px;
+            height: 24px;
+            background: var(--border-light);
+            transform: translateX(-50%);
+        }
+
+        .step-item.completed .step-line {
+            background: var(--accent-green);
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-name {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .step-item.completed .step-name {
+            color: var(--accent-green);
+        }
+
+        .step-item.active .step-name {
+            color: var(--accent-red);
+        }
+
+        .step-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Agent 辩论气泡 */
+        .agent-debate {
+            margin-top: 16px;
+            display: none;
+        }
+
+        .agent-debate.active {
+            display: block;
+        }
+
+        .debate-bubble {
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            margin-bottom: 8px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .debate-bubble.agent-0 {
+            background: #fff5f6;
+            border-left: 3px solid #ff2442;
+        }
+
+        .debate-bubble.agent-1 {
+            background: #faf5ff;
+            border-left: 3px solid #8b5cf6;
+        }
+
+        .debate-bubble.agent-2 {
+            background: #fffbeb;
+            border-left: 3px solid #f59e0b;
+        }
+
+        .debate-bubble.agent-3 {
+            background: #eff6ff;
+            border-left: 3px solid #3b82f6;
+        }
+
+        .debate-bubble.agent-4 {
+            background: #f0fff4;
+            border-left: 3px solid #10b981;
+        }
+
+        .debate-bubble.agent-5 {
+            background: #fff1f2;
+            border-left: 3px solid #f43f5e;
+        }
+
+        .debate-bubble.agent-6 {
+            background: #f0f9ff;
+            border-left: 3px solid #0ea5e9;
+        }
+
+        .debate-bubble.agent-7 {
+            background: #fefce8;
+            border-left: 3px solid #eab308;
+        }
+
+        /* 报告面板 */
+        .report-panel {
+            display: none;
+            margin-top: 32px;
+        }
+
+        .report-panel.active {
+            display: block;
+        }
+
+        .report-header {
+            display: flex;
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        .score-section {
+            text-align: center;
+            padding: 24px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-xl);
+        }
+
+        .score-ring {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 16px;
+        }
+
+        .score-value {
+            font-size: 48px;
+            font-weight: 700;
+        }
+
+        .score-grade {
+            display: inline-block;
+            padding: 4px 16px;
+            border-radius: var(--radius-full);
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .grade-s { background: #dcfce7; color: #16a34a; }
+        .grade-a { background: #dbeafe; color: #2563eb; }
+        .grade-b { background: #fef3c7; color: #d97706; }
+        .grade-c { background: #fed7aa; color: #ea580c; }
+        .grade-d { background: #fecaca; color: #dc2626; }
+
+        .radar-section {
+            flex: 1;
+            padding: 24px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-xl);
+        }
+
+        .radar-chart {
+            width: 100%;
+            height: 300px;
+        }
+
+        /* 问题和建议 */
+        .issues-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .issues-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+        }
+
+        .issues-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .issue-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            background: white;
+            border-radius: var(--radius-md);
+            margin-bottom: 8px;
+        }
+
+        .issue-level {
+            padding: 2px 8px;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 500;
+            height: fit-content;
+        }
+
+        .level-high { background: #fecaca; color: #dc2626; }
+        .level-medium { background: #fef3c7; color: #d97706; }
+        .level-low { background: #dcfce7; color: #16a34a; }
+
+        .issue-text {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        /* 优化方案 */
+        .optimize-section {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-xl);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .optimize-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .optimize-tab {
+            padding: 10px 20px;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-full);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .optimize-tab:hover {
+            border-color: var(--accent-1);
+        }
+
+        .optimize-tab.active {
+            background: var(--accent-1);
+            color: white;
+            border-color: var(--accent-1);
+        }
+
+        .optimize-content {
+            display: none;
+        }
+
+        .optimize-content.active {
+            display: block;
+        }
+
+        .optimized-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent-red);
+            margin-bottom: 16px;
+            padding: 16px;
+            background: white;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .optimized-title:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .optimized-title::before {
+            content: '📋 ';
+        }
+
+        .optimized-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .optimized-tag {
+            padding: 6px 12px;
+            background: var(--accent-2);
+            border-radius: var(--radius-full);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .optimized-tag:hover {
+            background: var(--accent-1);
+            color: white;
+        }
+
+        .optimized-text {
+            padding: 16px;
+            background: white;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            line-height: 1.8;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        /* 行动按钮 */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            padding: 12px 24px;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-full);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-action:hover {
+            border-color: var(--accent-1);
+            background: var(--bg-tertiary);
+        }
+
+        .btn-action.primary {
+            background: var(--accent-1);
+            color: white;
+            border-color: var(--accent-1);
+        }
+
+        .btn-action.primary:hover {
+            background: #dba0a4;
+        }
+
+        .copy-toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            padding: 12px 24px;
+            background: var(--accent-green);
+            color: white;
+            border-radius: var(--radius-full);
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .copy-toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* 8个Agent角色介绍 */
+        .agents-intro {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .agent-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .agent-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .agent-name {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .agent-role {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .feature-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .input-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .report-header {
+                flex-direction: column;
+            }
+            
+            .issues-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .agents-intro {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .nav-tabs {
+                display: none;
+            }
+        }
+
+        /* 隐藏页面 */
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        /* 竞品分析页 */
+        .competitor-input {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .competitor-result {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-xl);
+            padding: 24px;
+            margin-top: 24px;
+        }
+
+        /* 热点追踪 */
+        .hot-topics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .hot-topic-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .hot-topic-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        .hot-rank {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-red);
+            margin-bottom: 8px;
+        }
+
+        .hot-rank.gold { color: #f59e0b; }
+        .hot-rank.silver { color: #9ca3af; }
+        .hot-rank.bronze { color: #cd7f32; }
+
+        .hot-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .hot-meta {
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .hot-trend {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--accent-green);
+        }
+
+        .hot-trend.down {
+            color: var(--accent-red);
+        }
+
+        /* 智能回复 */
+        .reply-input {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-xl);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .comment-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .comment-item {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+        }
+
+        .comment-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .comment-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--accent-3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .comment-user {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .comment-type {
+            padding: 2px 8px;
+            border-radius: var(--radius-sm);
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .type-question { background: #dbeafe; color: #2563eb; }
+        .type-praise { background: #dcfce7; color: #16a34a; }
+        .type-complaint { background: #fef3c7; color: #d97706; }
+        .type-troll { background: #fecaca; color: #dc2626; }
+
+        .comment-text {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .reply-suggestion {
+            padding: 12px;
+            background: white;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            line-height: 1.6;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .reply-suggestion:hover {
+            border-color: var(--accent-1);
+        }
+
+        .reply-suggestion::before {
+            content: '💬 ';
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="nav-bar">
+        <div class="nav-brand">
+            <div class="brand-icon">📕</div>
+            <span class="brand-text">红书创作大师</span>
+        </div>
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchPage('diagnose')">🔍 笔记诊断</button>
+            <button class="nav-tab" onclick="switchPage('competitor')">🔬 竞品分析</button>
+            <button class="nav-tab" onclick="switchPage('hot')">🔥 热点追踪</button>
+            <button class="nav-tab" onclick="switchPage('reply')">💬 智能回复</button>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <!-- 笔记诊断页 -->
+        <section id="page-diagnose" class="page-section active">
+            <!-- 功能入口 -->
+            <div class="feature-grid">
+                <div class="feature-card" onclick="scrollToDiagnose()">
+                    <div class="feature-icon">📊</div>
+                    <div class="feature-title">笔记诊断</div>
+                    <div class="feature-desc">AI 多维度分析，预测爆款潜力，给出优化建议</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">✍️</div>
+                    <div class="feature-title">内容优化</div>
+                    <div class="feature-desc">3套优化方案一键生成，情绪/数据/悬念驱动</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <div class="feature-title">一键发布</div>
+                    <div class="feature-desc">复制优化内容到剪贴板，手机端直接粘贴发布</div>
+                </div>
+            </div>
+
+            <!-- 诊断面板 -->
+            <div class="diagnose-panel" id="diagnose-panel">
+                <h2 class="panel-title">开始诊断</h2>
+                
+                <div class="input-section">
+                    <div class="input-group">
+                        <label class="input-label">笔记标题 *</label>
+                        <input type="text" class="input-field" id="input-title" placeholder="输入你的笔记标题">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">选择品类 *</label>
+                        <div class="category-select">
+                            <button class="category-btn active" data-category="美食">🍜 美食</button>
+                            <button class="category-btn" data-category="穿搭">👗 穿搭</button>
+                            <button class="category-btn" data-category="科技">💻 科技</button>
+                            <button class="category-btn" data-category="旅游">✈️ 旅游</button>
+                            <button class="category-btn" data-category="生活">🏠 生活</button>
+                            <button class="category-btn" data-category="美妆">💄 美妆</button>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group full-width">
+                        <label class="input-label">笔记正文（可选）</label>
+                        <textarea class="input-field" id="input-content" placeholder="输入笔记正文内容..."></textarea>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">标签（可选，用逗号分隔）</label>
+                        <input type="text" class="input-field" id="input-tags" placeholder="如：干货, 技巧, 必看">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">图片数量（封面算1张）</label>
+                        <input type="number" class="input-field" id="input-images" value="1" min="1" max="9">
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 24px;">
+                    <button class="btn-primary" id="btn-diagnose" onclick="startDiagnose()">
+                        <span>🚀</span> 开始 AI 诊断
+                    </button>
+                </div>
+                
+                <!-- 诊断进度 -->
+                <div class="diagnose-progress" id="diagnose-progress">
+                    <div class="progress-header">
+                        <span class="progress-title">🔄 AI 诊断进行中...</span>
+                        <span class="progress-time" id="elapsed-time">0s</span>
+                    </div>
+                    <div class="steps-timeline" id="steps-timeline"></div>
+                </div>
+            </div>
+
+            <!-- 报告面板 -->
+            <div class="report-panel" id="report-panel">
+                <div class="report-header">
+                    <div class="score-section">
+                        <div class="score-ring" id="score-ring"></div>
+                        <div class="score-value" id="score-value">--</div>
+                        <div class="score-grade grade-a" id="score-grade">评级</div>
+                        <div style="margin-top: 12px; font-size: 13px; color: var(--text-secondary);">
+                            <span id="category-name">美食</span> · <span id="sample-info">基于874条数据训练</span>
+                        </div>
+                    </div>
+                    <div class="radar-section">
+                        <div class="radar-chart" id="radar-chart"></div>
+                    </div>
+                </div>
+
+                <!-- 问题发现 -->
+                <div class="issues-grid">
+                    <div class="issues-card">
+                        <div class="issues-title">⚠️ 发现的问题</div>
+                        <div id="issues-list"></div>
+                    </div>
+                    <div class="issues-card">
+                        <div class="issues-title">💡 优化建议</div>
+                        <div id="suggestions-list"></div>
+                    </div>
+                </div>
+
+                <!-- 优化方案 -->
+                <div class="optimize-section">
+                    <h3 style="font-size: 18px; margin-bottom: 16px;">✨ 优化方案（点击可直接复制）</h3>
+                    <div class="optimize-tabs">
+                        <button class="optimize-tab active" onclick="switchOptimizeTab(0)">😤 情绪驱动</button>
+                        <button class="optimize-tab" onclick="switchOptimizeTab(1)">📊 数据驱动</button>
+                        <button class="optimize-tab" onclick="switchOptimizeTab(2)">🤔 悬念驱动</button>
+                    </div>
+                    <div id="optimize-contents"></div>
+                </div>
+
+                <!-- 行动按钮 -->
+                <div class="action-buttons">
+                    <button class="btn-action primary" onclick="copyAll()">
+                        🚀 一键复制全部内容
+                    </button>
+                    <button class="btn-action" onclick="exportReport()">
+                        📥 导出诊断报告
+                    </button>
+                    <button class="btn-action" onclick="resetDiagnose()">
+                        🔄 重新诊断
+                    </button>
+                </div>
+            </div>
+
+            <!-- 8个Agent介绍 -->
+            <div style="margin-top: 48px;">
+                <h3 style="font-size: 18px; margin-bottom: 20px;">🤖 背后的8位AI专家</h3>
+                <div class="agents-intro">
+                    <div class="agent-card">
+                        <div class="agent-avatar" style="background: #fff5f6;">📝</div>
+                        <div class="agent-name">内容分析师</div>
+                        <div class="agent-role">Content Analyst</div>
+                    </div>
+                    <div class="agent-card">
+                        <div class="agent-avatar" style="background: #faf5ff;">🎨</div>
+                        <div class="agent-name">视觉诊断师</div>
+                        <div class="agent-role">Visual Expert</div>
+                    </div>
+                    <div class="agent-card">
+                        <div class="agent-avatar" style="background: #fffbeb;">📈</div>
+                        <div class="agent-name">增长策略师</div>
+                        <div class="agent-role">Growth Strategist</div>
+                    </div>
+                    <div class="agent-card">
+                        <div class="agent-avatar" style="background: #eff6ff;">👤</div>
+                        <div class="agent-name">用户模拟器</div>
+                        <div class="agent-role">User Simulator</div>
+                    </div>
+                    <div class="agent-card">
+                        <div class="agent-avatar" style="background: #f0fff4;">📋</div>
+                        <div class="agent-name">产品经理</div>
+                        <div class="agent-role">Product Manager</div>
+                    </div>
+                    <div class="agent-card">
+                        <div class="agent-avatar" style="background: #fff1f2;">🔍</div>
+                        <div class="agent-name">苛刻评审</div>
+                        <div class="agent-role">Critical Reviewer</div>
+                    </div>
+                    <div class="agent-card">
+                        <div class="agent-avatar" style="background: #f0f9ff;">🔑</div>
+                        <div class="agent-name">SEO优化师</div>
+                        <div class="agent-role">SEO Optimizer</div>
+                    </div>
+                    <div class="agent-card">
+                        <div class="agent-avatar" style="background: #fefce8;">⚖️</div>
+                        <div class="agent-name">综合裁判</div>
+                        <div class="agent-role">Chief Judge</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 竞品分析页 -->
+        <section id="page-competitor" class="page-section">
+            <div class="diagnose-panel">
+                <h2 class="panel-title">竞品分析</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 24px;">输入竞品笔记链接或内容，分析爆款原因，输出可借鉴策略</p>
+                
+                <div class="competitor-input">
+                    <div class="input-group">
+                        <label class="input-label">竞品笔记链接（可选）</label>
+                        <input type="text" class="input-field" placeholder="粘贴小红书笔记链接">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">选择品类</label>
+                        <div class="category-select">
+                            <button class="category-btn active">美食</button>
+                            <button class="category-btn">穿搭</button>
+                            <button class="category-btn">科技</button>
+                            <button class="category-btn">旅游</button>
+                            <button class="category-btn">生活</button>
+                        </div>
+                    </div>
+                    <div class="input-group full-width">
+                        <label class="input-label">竞品内容（标题+正文）</label>
+                        <textarea class="input-field" placeholder="复制竞品笔记的标题和正文..." style="min-height: 200px;"></textarea>
+                    </div>
+                </div>
+                
+                <div style="text-align: center;">
+                    <button class="btn-primary">
+                        <span>🔬</span> 开始分析
+                    </button>
+                </div>
+            </div>
+            
+            <div class="competitor-result">
+                <h3 style="font-size: 16px; margin-bottom: 16px;">📊 竞品分析报告</h3>
+                <p style="color: var(--text-secondary); font-size: 14px;">输入竞品内容后，这里将显示详细的爆款原因分析、差距对比报告和可借鉴策略。</p>
+            </div>
+        </section>
+
+        <!-- 热点追踪页 -->
+        <section id="page-hot" class="page-section">
+            <div class="diagnose-panel">
+                <h2 class="panel-title">热点追踪</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 24px;">实时追踪小红书热门话题，帮你抓住流量红利</p>
+            </div>
+            
+            <div class="hot-topics">
+                <div class="hot-topic-card">
+                    <div class="hot-rank gold">🥇</div>
+                    <div class="hot-title">#2024必吃的10家成都美食#</div>
+                    <div class="hot-meta">
+                        <span>热度 998万</span>
+                        <span class="hot-trend">↑ 12%</span>
+                    </div>
+                </div>
+                <div class="hot-topic-card">
+                    <div class="hot-rank silver">🥈</div>
+                    <div class="hot-title">#早春穿搭灵感#</div>
+                    <div class="hot-meta">
+                        <span>热度 856万</span>
+                        <span class="hot-trend">↑ 8%</span>
+                    </div>
+                </div>
+                <div class="hot-topic-card">
+                    <div class="hot-rank bronze">🥉</div>
+                    <div class="hot-title">#科技数码测评#</div>
+                    <div class="hot-meta">
+                        <span>热度 721万</span>
+                        <span class="hot-trend down">↓ 3%</span>
+                    </div>
+                </div>
+                <div class="hot-topic-card">
+                    <div class="hot-rank">4</div>
+                    <div class="hot-title">#旅行拍照技巧#</div>
+                    <div class="hot-meta">
+                        <span>热度 654万</span>
+                        <span class="hot-trend">↑ 15%</span>
+                    </div>
+                </div>
+                <div class="hot-topic-card">
+                    <div class="hot-rank">5</div>
+                    <div class="hot-title">#低成本改造出租屋#</div>
+                    <div class="hot-meta">
+                        <span>热度 589万</span>
+                        <span class="hot-trend">↑ 22%</span>
+                    </div>
+                </div>
+                <div class="hot-topic-card">
+                    <div class="hot-rank">6</div>
+                    <div class="hot-title">#职场穿搭指南#</div>
+                    <div class="hot-meta">
+                        <span>热度 512万</span>
+                        <span class="hot-trend down">↓ 5%</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 智能回复页 -->
+        <section id="page-reply" class="page-section">
+            <div class="diagnose-panel">
+                <h2 class="panel-title">智能回复</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 24px;">分析评论类型，生成对应风格的回复，支持批量处理</p>
+            </div>
+            
+            <div class="reply-input">
+                <div class="input-group">
+                    <label class="input-label">粘贴评论内容（每行一条）</label>
+                    <textarea class="input-field" placeholder="这个教程太实用了！&#10;请问具体怎么做？&#10;感觉一般般吧&#10;哈哈哈哈哈笑死我了" style="min-height: 150px;"></textarea>
+                </div>
+                <div style="margin-top: 16px; text-align: center;">
+                    <button class="btn-primary">
+                        <span>💬</span> 生成回复建议
+                    </button>
+                </div>
+            </div>
+            
+            <div class="comment-list">
+                <div class="comment-item">
+                    <div class="comment-header">
+                        <div class="comment-avatar">👤</div>
+                        <span class="comment-user">小红薯_abc123</span>
+                        <span class="comment-type type-praise">夸赞</span>
+                    </div>
+                    <div class="comment-text">这个教程太实用了！已经收藏了～</div>
+                    <div class="reply-suggestion">谢谢喜欢！有问题随时问我哦 😊 觉得有用的话可以点个赞支持一下～</div>
+                </div>
+                <div class="comment-item">
+                    <div class="comment-header">
+                        <div class="comment-avatar">👤</div>
+                        <span class="comment-user">美食爱好者</span>
+                        <span class="comment-type type-question">提问</span>
+                    </div>
+                    <div class="comment-text">请问具体怎么做呀？看着好心动！</div>
+                    <div class="reply-suggestion">姐妹看过来！教程在正文第三段哦～有不懂的可以再问我！💕</div>
+                </div>
+                <div class="comment-item">
+                    <div class="comment-header">
+                        <div class="comment-avatar">👤</div>
+                        <span class="comment-user">理性测评</span>
+                        <span class="comment-type type-complaint">吐槽</span>
+                    </div>
+                    <div class="comment-text">感觉一般般吧，没有说的那么夸张</div>
+                    <div class="reply-suggestion">感谢真诚反馈！每个人的体验可能不太一样～你有什么建议也可以告诉我哦 🙏</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 复制提示 -->
+    <div class="copy-toast" id="copy-toast">✅ 已复制到剪贴板！</div>
+
+    <script>
+        // ========== 全局状态 ==========
+        let currentCategory = '美食';
+        let diagnoseResult = null;
+        let startTime = null;
+        let timerInterval = null;
+        let currentOptimizeTab = 0;
+
+        // ========== 品类配置 ==========
+        const CATEGORY_CONFIG = {
+            '美食': {
+                weights: { title: 0.573, content: 0.132, visual: 0.086, tag: 0.097, engagement: 0.111 },
+                params: { titleRange: [11, 19], contentRange: [105, 342], tagOpt: 6, imgRange: [2, 10] },
+                baseline: { avg: 33462, median: 7333, viral: 112965 }
+            },
+            '穿搭': {
+                weights: { title: 0.395, content: 0.125, visual: 0.250, tag: 0.058, engagement: 0.172 },
+                params: { titleRange: [11, 20], contentRange: [92, 224], tagOpt: 6, imgRange: [2, 10] },
+                baseline: { avg: 7507, median: 2069, viral: 18037 }
+            },
+            '科技': {
+                weights: { title: 0.411, content: 0.125, visual: 0.103, tag: 0.095, engagement: 0.267 },
+                params: { titleRange: [12, 20], contentRange: [87, 517], tagOpt: 6, imgRange: [1, 6] },
+                baseline: { avg: 1275, median: 175, viral: 3325 }
+            },
+            '旅游': {
+                weights: { title: 0.376, content: 0.050, visual: 0.120, tag: 0.312, engagement: 0.142 },
+                params: { titleRange: [11, 20], contentRange: [123, 737], tagOpt: 6, imgRange: [4, 14] },
+                baseline: { avg: 16563, median: 4538, viral: 39426 }
+            },
+            '生活': {
+                weights: { title: 0.407, content: 0.083, visual: 0.071, tag: 0.277, engagement: 0.162 },
+                params: { titleRange: [10, 20], contentRange: [24, 148], tagOpt: 6, imgRange: [1, 8] },
+                baseline: { avg: 8038, median: 773, viral: 17097 }
+            },
+            '美妆': {
+                weights: { title: 0.400, content: 0.150, visual: 0.200, tag: 0.100, engagement: 0.150 },
+                params: { titleRange: [10, 20], contentRange: [100, 400], tagOpt: 6, imgRange: [3, 9] },
+                baseline: { avg: 12000, median: 3000, viral: 30000 }
+            }
+        };
+
+        // ========== 诊断步骤 ==========
+        const DIAGNOSE_STEPS = [
+            { name: '预评分引擎', desc: 'Model A 即时评分，<50ms', agent: null },
+            { name: '解析笔记内容', desc: '提取标题、正文、标签信息', agent: null },
+            { name: '分析封面视觉', desc: '评估构图、色彩、文字占比', agent: '视觉诊断师' },
+            { name: '对比垂类数据', desc: '与874条同类笔记基线对比', agent: null },
+            { name: '内容分析师诊断', desc: '评估文案结构与可读性', agent: '内容分析师' },
+            { name: '增长策略师诊断', desc: '评估标签与发布策略', agent: '增长策略师' },
+            { name: '用户模拟器运行', desc: '模拟真实用户反应与评论', agent: '用户模拟器' },
+            { name: '产品经理评审', desc: '规划内容方向和选题', agent: '产品经理' },
+            { name: '苛刻评审挑刺', desc: '识别所有问题与风险', agent: '苛刻评审' },
+            { name: 'SEO优化师优化', desc: '关键词优化与标签优化', agent: 'SEO优化师' },
+            { name: '综合裁判评定', desc: '汇总意见，给出最终方案', agent: '综合裁判' }
+        ];
+
+        // ========== Agent 辩论内容 ==========
+        const AGENT_DEBATES = {
+            '视觉诊断师': [
+                '封面色彩对比度不错，但文字占比略低，建议增加标题文字突出。',
+                '整体构图清晰，但缺少视觉焦点，建议在右下角增加引导元素。'
+            ],
+            '内容分析师': [
+                '标题有数字钩子，但感叹号过多显得用力过猛，建议精简。',
+                '正文结构清晰，干货部分有价值的，但开头太啰嗦，建议直接切入。'
+            ],
+            '增长策略师': [
+                '标签选择精准，覆盖了搜索热词，但建议增加一个长尾标签。',
+                '发布时间建议在17:00-19:00，这个时段互动量最高。'
+            ],
+            '用户模拟器': [
+                '作为用户，我会点击这个标题，但可能不会收藏，感觉缺少紧迫感。',
+                '阅读过程很流畅，但如果能在结尾有个福利钩子会更好。'
+            ],
+            '产品经理': [
+                '选题符合当前热点趋势，但差异化不够明显，需要找到独特切入点。',
+                '目标人群定位清晰，但内容深度可以再挖掘，增加专业背书。'
+            ],
+            '苛刻评审': [
+                '⚠️ 标题可能涉及夸大宣传，建议修改为更客观的表达。',
+                '⚠️ 第3段提到的数据建议加上来源，否则容易被杠。'
+            ],
+            'SEO优化师': [
+                '关键词密度适中，但建议在标题前部放置核心搜索词。',
+                '标签中可以加入「合集」类标签，更容易被搜索到。'
+            ]
+        };
+
+        // ========== 页面切换 ==========
+        function switchPage(page) {
+            document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('page-' + page).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function scrollToDiagnose() {
+            document.getElementById('diagnose-panel').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ========== 品类选择 ==========
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const parent = this.closest('.category-select') || this.closest('.input-group');
+                if (parent) {
+                    parent.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                }
+                this.classList.add('active');
+                currentCategory = this.dataset.category || this.textContent.replace(/[^\u4e00-\u9fa5]/g, '');
+            });
+        });
+
+        // ========== 诊断流程 ==========
+        async function startDiagnose() {
+            const title = document.getElementById('input-title').value.trim();
+            if (!title) {
+                alert('请输入笔记标题！');
+                return;
+            }
+
+            const content = document.getElementById('input-content').value.trim();
+            const tags = document.getElementById('input-tags').value.trim();
+            const imageCount = parseInt(document.getElementById('input-images').value) || 1;
+
+            // 显示进度
+            document.getElementById('diagnose-progress').classList.add('active');
+            document.getElementById('btn-diagnose').disabled = true;
+            document.getElementById('report-panel').classList.remove('active');
+
+            // 初始化步骤
+            renderSteps();
+            startTime = Date.now();
+            timerInterval = setInterval(updateTimer, 1000);
+
+            // 开始诊断动画
+            await simulateDiagnose(title, content, tags, imageCount);
+        }
+
+        function renderSteps() {
+            const container = document.getElementById('steps-timeline');
+            container.innerHTML = DIAGNOSE_STEPS.map((step, i) => `
+                <div class="step-item" id="step-${i}">
+                    <div class="step-indicator">
+                        ${i + 1}
+                        ${i < DIAGNOSE_STEPS.length - 1 ? '<div class="step-line"></div>' : ''}
+                    </div>
+                    <div class="step-content">
+                        <div class="step-name">${step.name}${step.agent ? ' 🤖' : ''}</div>
+                        <div class="step-desc">${step.desc}</div>
+                        <div class="agent-debate" id="debate-${i}"></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function simulateDiagnose(title, content, tags, imageCount) {
+            // Step 0: 预评分
+            await updateStep(0, 'completed');
+            await sleep(200);
+            
+            // 计算评分
+            const result = calculateScore(title, content, tags, imageCount);
+            diagnoseResult = result;
+
+            // Step 1-3: 解析和分析
+            for (let i = 1; i <= 3; i++) {
+                await updateStep(i, 'active');
+                await sleep(300);
+                await updateStep(i, 'completed');
+            }
+
+            // Step 4-7: Agent 诊断（含辩论）
+            const agentSteps = [4, 5, 6, 7, 8, 9, 10];
+            const agents = ['内容分析师', '视觉诊断师', '增长策略师', '用户模拟器', '产品经理', '苛刻评审', 'SEO优化师'];
+            
+            for (let i = 0; i < agentSteps.length; i++) {
+                const stepId = agentSteps[i];
+                await updateStep(stepId, 'active');
+                
+                // 显示 Agent 辩论
+                if (agents[i] && AGENT_DEBATES[agents[i]]) {
+                    const debateDiv = document.getElementById(`debate-${stepId}`);
+                    debateDiv.classList.add('active');
+                    
+                    for (let j = 0; j < AGENT_DEBATES[agents[i]].length; j++) {
+                        await sleep(400);
+                        const bubble = document.createElement('div');
+                        bubble.className = `debate-bubble agent-${i % 8}`;
+                        bubble.textContent = `【${agents[i]}】${AGENT_DEBATES[agents[i]][j]}`;
+                        debateDiv.appendChild(bubble);
+                        debateDiv.scrollTop = debateDiv.scrollHeight;
+                    }
+                }
+                
+                await sleep(500);
+                await updateStep(stepId, 'completed');
+            }
+
+            // 完成
+            clearInterval(timerInterval);
+            showReport(result);
+        }
+
+        async function updateStep(index, status) {
+            const step = document.getElementById(`step-${index}`);
+            if (step) {
+                step.classList.remove('active', 'completed');
+                step.classList.add(status);
+                
+                if (status === 'active') {
+                    step.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+            await sleep(100);
+        }
+
+        function updateTimer() {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            document.getElementById('elapsed-time').textContent = elapsed + 's';
+        }
+
+        // ========== 评分引擎 ==========
+        function calculateScore(title, content, tags, imageCount) {
+            const config = CATEGORY_CONFIG[currentCategory];
+            
+            // 计算各维度分数
+            const titleLen = title.length;
+            const titleRange = config.params.titleRange;
+            const titleScore = rangeScore(titleLen, titleRange[0], titleRange[1]);
+            
+            // 标题加分项
+            const hasNumber = /\d+/.test(title);
+            const hookCount = countHooks(title);
+            const hasEmoji = /[\u{1F300}-\u{1F9FF}]/u.test(title);
+            
+            let titleFinal = titleScore;
+            if (hasNumber) titleFinal += 5;
+            titleFinal += Math.min(hookCount, 3) * 3;
+            if (hasEmoji) titleFinal += 2;
+            titleFinal = Math.min(titleFinal, 100);
+
+            // 内容质量
+            const contentLen = content ? content.length : 0;
+            const contentRange = config.params.contentRange;
+            const contentScore = rangeScore(contentLen, contentRange[0], contentRange[1], 85);
+
+            // 视觉质量
+            const imgRange = config.params.imgRange;
+            const visualScore = rangeScore(imageCount, imgRange[0], imgRange[1]);
+
+            // 标签策略
+            const tagList = tags ? tags.split(/[,，]/).filter(t => t.trim()) : [];
+            const tagOpt = config.params.tagOpt;
+            const tagScore = Math.max(0, 100 - Math.abs(tagList.length - tagOpt) * 10);
+
+            // 互动潜力
+            let engagementScore = 0;
+            if (titleLen >= titleRange[0]) engagementScore += 25;
+            if (hasNumber) engagementScore += 15;
+            if (hookCount >= 2) engagementScore += 20;
+            if (Math.abs(tagList.length - tagOpt) <= 1) engagementScore += 20;
+            if (imageCount >= imgRange[0] && imageCount <= imgRange[1]) engagementScore += 20;
+
+            // 加权总分
+            const total = Math.min(100, Math.round(
+                titleFinal * config.weights.title +
+                contentScore * config.weights.content +
+                visualScore * config.weights.visual +
+                tagScore * config.weights.tag +
+                engagementScore * config.weights.engagement
+            ));
+
+            // 评级
+            let grade, gradeClass;
+            if (total >= 90) { grade = 'S'; gradeClass = 'grade-s'; }
+            else if (total >= 75) { grade = 'A'; gradeClass = 'grade-a'; }
+            else if (total >= 60) { grade = 'B'; gradeClass = 'grade-b'; }
+            else if (total >= 40) { grade = 'C'; gradeClass = 'grade-c'; }
+            else { grade = 'D'; gradeClass = 'grade-d'; }
+
+            return {
+                total,
+                grade,
+                gradeClass,
+                dimensions: {
+                    title_quality: Math.round(titleFinal),
+                    content_quality: Math.round(contentScore),
+                    visual_quality: Math.round(visualScore),
+                    tag_strategy: Math.round(tagScore),
+                    engagement_potential: Math.round(engagementScore)
+                },
+                weights: config.weights,
+                baseline: config.baseline,
+                issues: generateIssues(title, content, tags, imageCount, titleFinal, contentScore, visualScore, tagScore),
+                suggestions: generateSuggestions(title, content, tags, imageCount),
+                optimized: generateOptimized(title, content, tags)
+            };
+        }
+
+        function rangeScore(value, min, max, base = 80) {
+            if (value >= min && value <= max) {
+                const mid = (min + max) / 2;
+                const half = (max - min) / 2;
+                return base + (100 - base) * (1 - Math.abs(value - mid) / half);
+            } else if (value < min) {
+                return Math.max(20, base * value / min);
+            } else {
+                return Math.max(40, base - (value - max) * 2);
+            }
+        }
+
+        function countHooks(text) {
+            let count = 0;
+            if (/\d+/.test(text)) count++;
+            if (/[！？!？?]/.test(text)) count++;
+            if (/[｜|]/.test(text)) count++;
+            if (/[✨🔥‼⭐💯]/.test(text)) count++;
+            if (/(必|绝了|太|超|巨|神仙|宝藏|救命)/.test(text)) count++;
+            return count;
+        }
+
+        function generateIssues(title, content, tags, imageCount, titleScore, contentScore, visualScore, tagScore) {
+            const issues = [];
+            
+            if (titleScore < 70) {
+                issues.push({ text: '标题缺少数字或情绪钩子', level: 'high' });
+            }
+            if (contentScore < 60) {
+                issues.push({ text: '正文长度可能不在最优区间', level: 'medium' });
+            }
+            if (visualScore < 60) {
+                issues.push({ text: '图片数量建议调整', level: 'medium' });
+            }
+            if (tagScore < 70) {
+                issues.push({ text: '标签数量偏离最佳值（6个）', level: 'low' });
+            }
+            if (!content) {
+                issues.push({ text: '未提供正文内容，无法全面评估', level: 'medium' });
+            }
+            
+            return issues;
+        }
+
+        function generateSuggestions(title, content, tags, imageCount) {
+            const suggestions = [];
+            
+            suggestions.push('建议在标题中加入具体数字，如"3个技巧"、"5步教程"');
+            suggestions.push('正文开头直接切入主题，避免冗长的背景铺垫');
+            suggestions.push('发布前检查是否包含敏感词或夸大宣传');
+            suggestions.push('建议在17:00-19:00发布，这个时段互动量最高');
+            suggestions.push('结尾添加互动引导，如"你们觉得呢？"、"评论区见"');
+            
+            return suggestions;
+        }
+
+        function generateOptimized(title, content, tags) {
+            // 情绪驱动
+            const emotion = {
+                title: title + '！绝了！这波操作太牛了！',
+                tags: tags ? tags + ',必看,宝藏,干货' : '#必看 #宝藏 #干货',
+                content: content || '今天必须跟大家分享这个！\n\n相信我，看完你一定会感谢我的！\n\n姐妹们冲鸭！💪'
+            };
+            
+            // 数据驱动
+            const data = {
+                title: title.replace(/[！!]/g, '').trim() + '（附完整数据）',
+                tags: tags ? tags + ',测评,数据,对比' : '#测评 #数据 #对比',
+                content: content || '耗时3天整理的数据对比\n\n核心数据：\n1. 效率提升 200%\n2. 成本降低 50%\n3. 满意度 98%\n\n具体怎么做，往下看！'
+            };
+            
+            // 悬念驱动
+            const suspense = {
+                title: '直到看完最后一步，我才发现以前都做错了...',
+                tags: tags ? tags + ',揭秘,避坑,必读' : '#揭秘 #避坑 #必读',
+                content: content || '先别急着划走...\n\n如果我告诉你，有一个方法可以...\n\n（此处省略999字）\n\n现在你知道了吗？评论区告诉我！'
+            };
+            
+            return [emotion, data, suspense];
+        }
+
+        // ========== 显示报告 ==========
+        function showReport(result) {
+            document.getElementById('diagnose-progress').classList.remove('active');
+            document.getElementById('report-panel').classList.add('active');
+
+            // 评分圆环
+            renderScoreRing(result.total);
+            
+            // 更新分数显示
+            document.getElementById('score-value').textContent = result.total;
+            const gradeEl = document.getElementById('score-grade');
+            gradeEl.textContent = '等级 ' + result.grade;
+            gradeEl.className = 'score-grade ' + result.gradeClass;
+            
+            // 品类信息
+            document.getElementById('category-name').textContent = currentCategory;
+            document.getElementById('sample-info').textContent = '基于874条数据训练';
+
+            // 雷达图
+            renderRadarChart(result.dimensions);
+
+            // 问题列表
+            renderIssues(result.issues);
+
+            // 优化方案
+            renderOptimize(result.optimized);
+        }
+
+        function renderScoreRing(score) {
+            const container = document.getElementById('score-ring');
+            container.innerHTML = '';
+            
+            const chart = echarts.init(container);
+            const color = score >= 75 ? '#52c41a' : score >= 60 ? '#f59e0b' : '#ff4d4f';
+            
+            const option = {
+                series: [{
+                    type: 'gauge',
+                    startAngle: 90,
+                    endAngle: -270,
+                    radius: '90%',
+                    pointer: { show: false },
+                    progress: {
+                        show: true,
+                        overlap: false,
+                        roundCap: true,
+                        clip: false,
+                        itemStyle: {
+                            color: color
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            width: 12,
+                            color: [[1, '#E8E3DB']]
+                        }
+                    },
+                    splitLine: { show: false },
+                    axisTick: { show: false },
+                    axisLabel: { show: false },
+                    data: [{ value: score, name: '综合评分', title: { offsetCenter: ['0%', '30%'] }, detail: { offsetCenter: ['0%', '0%'] } }],
+                    detail: {
+                        valueAnimation: true,
+                        formatter: '{value}',
+                        fontSize: 36,
+                        fontWeight: 700,
+                        color: color,
+                        offsetCenter: ['0%', '0%']
+                    }
+                }]
+            };
+            
+            chart.setOption(option);
+        }
+
+        function renderRadarChart(dimensions) {
+            const container = document.getElementById('radar-chart');
+            container.innerHTML = '';
+            
+            const chart = echarts.init(container);
+            
+            const option = {
+                radar: {
+                    indicator: [
+                        { name: '标题质量', max: 100 },
+                        { name: '内容质量', max: 100 },
+                        { name: '视觉表现', max: 100 },
+                        { name: '标签策略', max: 100 },
+                        { name: '互动潜力', max: 100 }
+                    ],
+                    shape: 'polygon',
+                    splitNumber: 4,
+                    axisName: {
+                        color: '#7A7A7A',
+                        fontSize: 12
+                    },
+                    splitLine: {
+                        lineStyle: { color: '#E8E3DB' }
+                    },
+                    splitArea: {
+                        areaStyle: {
+                            color: ['#FDF8F0', '#F5F0E8', '#EDE8E0', '#E5E0D8']
+                        }
+                    },
+                    axisLine: {
+                        lineStyle: { color: '#D8D3CB' }
+                    }
+                },
+                series: [{
+                    type: 'radar',
+                    data: [{
+                        value: [
+                            dimensions.title_quality,
+                            dimensions.content_quality,
+                            dimensions.visual_quality,
+                            dimensions.tag_strategy,
+                            dimensions.engagement_potential
+                        ],
+                        name: '五维评分',
+                        areaStyle: {
+                            color: 'rgba(232, 180, 184, 0.4)'
+                        },
+                        lineStyle: {
+                            color: '#E8B4B8',
+                            width: 2
+                        },
+                        itemStyle: {
+                            color: '#E8B4B8'
+                        }
+                    }]
+                }]
+            };
+            
+            chart.setOption(option);
+        }
+
+        function renderIssues(issues) {
+            const container = document.getElementById('issues-list');
+            container.innerHTML = issues.map(issue => `
+                <div class="issue-item">
+                    <span class="issue-level level-${issue.level}">${issue.level === 'high' ? '高' : issue.level === 'medium' ? '中' : '低'}</span>
+                    <span class="issue-text">${issue.text}</span>
+                </div>
+            `).join('');
+            
+            // 建议
+            const suggestions = generateSuggestions('', '', '', 0);
+            document.getElementById('suggestions-list').innerHTML = suggestions.map(s => `
+                <div class="issue-item">
+                    <span class="issue-level level-low">💡</span>
+                    <span class="issue-text">${s}</span>
+                </div>
+            `).join('');
+        }
+
+        function renderOptimize(optimized) {
+            const container = document.getElementById('optimize-contents');
+            container.innerHTML = optimized.map((opt, i) => `
+                <div class="optimize-content ${i === 0 ? 'active' : ''}" id="optimize-${i}">
+                    <div class="optimized-title" onclick="copyText(this)">${opt.title}</div>
+                    <div class="optimized-tags">
+                        ${opt.tags.split(/[,，|#]/).filter(t => t.trim()).map(t => `<span class="optimized-tag" onclick="copyText(this)">#${t.trim()}</span>`).join('')}
+                    </div>
+                    <div class="optimized-text">${opt.content}</div>
+                </div>
+            `).join('');
+        }
+
+        function switchOptimizeTab(index) {
+            document.querySelectorAll('.optimize-tab').forEach((t, i) => {
+                t.classList.toggle('active', i === index);
+            });
+            document.querySelectorAll('.optimize-content').forEach((c, i) => {
+                c.classList.toggle('active', i === index);
+            });
+            currentOptimizeTab = index;
+        }
+
+        // ========== 复制功能 ==========
+        function copyText(el) {
+            const text = el.textContent.replace(/^[\s#]+/, '');
+            navigator.clipboard.writeText(text);
+            showToast('已复制：' + text.substring(0, 20) + '...');
+        }
+
+        function copyAll() {
+            if (!diagnoseResult) return;
+            
+            const opt = diagnoseResult.optimized[currentOptimizeTab];
+            const all = `【标题】\n${opt.title}\n\n【标签】\n${opt.tags}\n\n【正文】\n${opt.content}`;
+            
+            navigator.clipboard.writeText(all);
+            showToast('已复制全部内容到剪贴板！');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('copy-toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        function exportReport() {
+            if (!diagnoseResult) return;
+            
+            html2canvas(document.querySelector('.report-panel')).then(canvas => {
+                const link = document.createElement('a');
+                link.download = '红书诊断报告.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
+
+        function resetDiagnose() {
+            document.getElementById('diagnose-progress').classList.remove('active');
+            document.getElementById('report-panel').classList.remove('active');
+            document.getElementById('btn-diagnose').disabled = false;
+            document.getElementById('input-title').value = '';
+            document.getElementById('input-content').value = '';
+            document.getElementById('input-tags').value = '';
+            document.getElementById('input-images').value = '1';
+            diagnoseResult = null;
+            
+            if (timerInterval) clearInterval(timerInterval);
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // ========== 初始化 ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            // 预加载字体后再显示
+            document.body.style.opacity = '1';
+        });
+    </script>
+</body>
+</html>
