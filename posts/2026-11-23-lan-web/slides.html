@@ -1,0 +1,203 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans CJK SC',sans-serif;background:#ccc}
+.s{width:1440px;height:1080px;background:#EAECF0;position:relative;overflow:hidden;padding:56px 64px;display:flex;flex-direction:column;gap:30px;margin-bottom:20px}
+.hd .tag{display:inline-block;font-size:24px;font-weight:800;color:#fff;background:linear-gradient(135deg,#5470c6,#7bc6e6);padding:6px 18px;border-radius:30px}
+.hd h1{font-size:60px;font-weight:900;color:#0D1117;margin:18px 0 10px;line-height:1.2}
+.hd p{font-size:28px;color:#4B5563;font-weight:600}
+.card{background:#fff;border-radius:26px;box-shadow:0 4px 24px rgba(0,0,0,.08);padding:30px 34px}
+.ft{position:absolute;right:40px;bottom:26px;font-size:20px;font-weight:800;color:#5470c6}
+.pill{display:inline-flex;align-items:center;gap:8px;background:#fff;border-radius:40px;padding:14px 26px;font-size:28px;font-weight:800;color:#3f56a8;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.file{display:flex;align-items:center;gap:14px;background:#F4F5F8;border-radius:14px;padding:14px 18px;font-size:25px;font-weight:700;color:#1F2937;position:relative}
+.file i{font-style:normal;width:38px;height:44px;border-radius:6px;background:#7bc6e6;color:#fff;font-size:16px;display:flex;align-items:center;justify-content:center;font-weight:900}
+.strike::after{content:'';position:absolute;left:12px;right:12px;top:50%;height:4px;background:#ee6666;border-radius:2px;transform:rotate(-3deg)}
+.browser{border-radius:18px;overflow:hidden;border:2px solid #D0D5DD;background:#fff}
+.bar{background:#F1F2F6;padding:12px 16px;display:flex;align-items:center;gap:10px}
+.dots span{display:inline-block;width:12px;height:12px;border-radius:50%;background:#D0D5DD;margin-right:6px}
+.url{flex:1;background:#fff;border-radius:20px;padding:8px 18px;font-size:22px;font-weight:800;color:#3f56a8;font-family:'Noto Sans CJK SC',monospace}
+.mini{padding:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.mk{background:#F4F5F8;border-radius:12px;padding:12px}
+.mk b{display:block;font-size:30px;color:#0D1117}
+.mk small{font-size:17px;color:#4B5563;font-weight:700}
+.bars{grid-column:1/4;display:flex;align-items:flex-end;gap:12px;height:120px;padding:10px 6px 0;background:#F4F5F8;border-radius:12px}
+.bars div{flex:1;border-radius:8px 8px 0 0;background:linear-gradient(#5470c6,#8fa3df)}
+.who{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:22px;font-weight:800;color:#1F2937}
+.av{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:900;color:#fff}
+.b1{background:linear-gradient(135deg,#5470c6,#8fa3df)}.b2{background:linear-gradient(135deg,#9a60b4,#c49ad4)}.b3{background:linear-gradient(135deg,#ff9f7f,#ffc8b0)}.b4{background:linear-gradient(135deg,#fac858,#fde09a)}
+.msg{display:flex;gap:16px;align-items:flex-start}
+.msg .t{font-size:20px;color:#9CA3AF;font-weight:800;width:70px;padding-top:12px}
+.bub{background:#F4F5F8;border-radius:4px 20px 20px 20px;padding:14px 20px;font-size:25px;font-weight:700;color:#1F2937;max-width:620px}
+.bub .f{display:inline-flex;align-items:center;gap:8px;margin-top:8px;background:#fff;border-radius:10px;padding:8px 14px;font-size:22px;color:#3f56a8}
+.prob{display:flex;gap:18px;align-items:flex-start}
+.prob .n{width:56px;height:56px;border-radius:16px;background:rgba(238,102,102,.14);color:#ee6666;font-size:30px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.prob h3{font-size:32px;font-weight:900;color:#0D1117}
+.prob p{font-size:23px;color:#4B5563;font-weight:600;margin-top:4px;line-height:1.5}
+.lan{border:4px dashed #8fa3df;border-radius:34px;background:rgba(84,112,198,.05);position:relative}
+.lan .lab{position:absolute;top:-24px;left:40px;background:#5470c6;color:#fff;font-size:24px;font-weight:900;padding:8px 22px;border-radius:30px}
+.host{background:#fff;border-radius:26px;box-shadow:0 6px 28px rgba(84,112,198,.25);border:3px solid #5470c6;padding:26px 30px;text-align:center}
+.host h3{font-size:36px;font-weight:900;color:#3f56a8}
+.host p{font-size:23px;color:#4B5563;font-weight:700;margin-top:6px}
+.dev{background:#fff;border-radius:22px;box-shadow:0 4px 18px rgba(0,0,0,.08);padding:20px 22px;text-align:center}
+.dev h4{font-size:28px;font-weight:900;color:#0D1117;margin-top:8px}
+.dev code{display:block;margin-top:8px;font-size:19px;font-weight:800;color:#3f56a8;background:rgba(84,112,198,.1);border-radius:10px;padding:6px 10px;font-family:inherit}
+.toast{background:#0D1117;color:#fff;border-radius:14px;padding:12px 16px;font-size:21px;font-weight:800;display:flex;align-items:center;gap:10px}
+.toast span{background:#7bc6e6;color:#0D1117;border-radius:8px;padding:2px 10px;font-size:18px}
+.step{display:flex;align-items:center;gap:14px;font-size:26px;font-weight:800;color:#1F2937}
+.step b{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#5470c6,#7bc6e6);color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.col h2{font-size:38px;font-weight:900;margin-bottom:20px}
+.row{display:flex;align-items:center;gap:16px;font-size:27px;font-weight:700;color:#1F2937;padding:16px 0;border-bottom:2px dashed #E5E7EB}
+.row:last-child{border:none}
+.ic{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;flex-shrink:0}
+.bad{background:rgba(238,102,102,.14);color:#ee6666}.good{background:rgba(84,112,198,.14);color:#5470c6}.mid{background:rgba(250,200,88,.22);color:#b06000}
+table{width:100%;border-collapse:separate;border-spacing:0}
+th{font-size:24px;font-weight:900;color:#4B5563;text-align:left;padding:16px 14px;border-bottom:3px solid #D0D5DD}
+td{font-size:24px;font-weight:700;color:#1F2937;padding:20px 14px;border-bottom:2px solid #EEF0F4;vertical-align:middle}
+td:first-child{font-weight:900;font-size:26px}
+tr.hl td{background:rgba(84,112,198,.08)}
+tr.hl td:first-child{color:#3f56a8;border-radius:16px 0 0 16px}
+tr.hl td:last-child{border-radius:0 16px 16px 0}
+.bd{display:inline-block;border-radius:20px;padding:5px 14px;font-size:21px;font-weight:800}
+.bd.b{background:rgba(84,112,198,.14);color:#3f56a8}.bd.r{background:rgba(238,102,102,.14);color:#c23d3d}.bd.a{background:rgba(250,200,88,.24);color:#8a4b00}
+.arrow{font-size:60px;color:#8fa3df;font-weight:900}
+</style></head><body>
+
+<!-- 1 封面 -->
+<div class="s" id="s1">
+ <div class="hd"><span class="tag">CreamViz · 公司内部系统的新做法</span><h1>数据改了，不用再一遍遍发文件</h1><p>公司里打开一个网址，所有人看到的永远是最新那一份</p></div>
+ <div style="display:flex;gap:30px;align-items:center;flex:1">
+  <div class="card" style="flex:1;display:flex;flex-direction:column;gap:14px">
+   <div style="font-size:30px;font-weight:900;color:#c23d3d;margin-bottom:6px">以前：文件满天飞</div>
+   <div class="file strike"><i>XLS</i>销售台账_11月_最终版.xlsx</div>
+   <div class="file strike"><i>XLS</i>销售台账_11月_最终版2.xlsx</div>
+   <div class="file strike"><i>XLS</i>销售台账_11月_真最终版(1).xlsx</div>
+   <div class="file strike"><i>XLS</i>销售台账_11月_改了单价.xlsx</div>
+   <div style="font-size:23px;color:#4B5563;font-weight:700;margin-top:6px">谁手上是最新的？没人说得清</div>
+  </div>
+  <div class="arrow">→</div>
+  <div class="card" style="flex:1.15">
+   <div style="font-size:30px;font-weight:900;color:#3f56a8;margin-bottom:16px">现在：一个网址</div>
+   <div class="browser"><div class="bar"><span class="dots"><span></span><span></span><span></span></span><div class="url">http://192.168.1.8:8080</div></div>
+    <div class="mini"><div class="mk"><small>本月收入</small><b>128.6万</b></div><div class="mk"><small>应收余额</small><b>46.2万</b></div><div class="mk"><small>更新于</small><b>刚刚</b></div>
+     <div class="bars"><div style="height:45%"></div><div style="height:62%"></div><div style="height:55%"></div><div style="height:78%"></div><div style="height:70%"></div><div style="height:92%"></div></div></div></div>
+   <div style="display:flex;justify-content:space-around;margin-top:22px"><div class="who"><div class="av b1">会</div>会计</div><div class="who"><div class="av b2">老</div>老板</div><div class="who"><div class="av b3">销</div>销售</div><div class="who"><div class="av b4">仓</div>仓管</div></div>
+  </div>
+ </div>
+ <div style="display:flex;gap:16px;justify-content:center;margin-bottom:20px"><span class="pill">不用买服务器</span><span class="pill">数据不出公司</span><span class="pill">同事不用装软件</span><span class="pill">改了马上同步</span></div>
+ <div class="ft">© CreamViz by Alin</div>
+</div>
+
+<!-- 2 痛点 -->
+<div class="s" id="s2">
+ <div class="hd"><span class="tag">痛点</span><h1>改一次数，就要发一圈文件</h1><p>这样的群聊，是不是每周都在上演</p></div>
+ <div style="display:flex;gap:30px;flex:1">
+  <div class="card" style="flex:1.15;display:flex;flex-direction:column;gap:20px">
+   <div class="msg"><div class="t">09:05</div><div class="av b1" style="width:52px;height:52px;font-size:22px">会</div><div class="bub">11 月台账整理好了，大家看下<br><span class="f">📄 11月台账.xlsx</span></div></div>
+   <div class="msg"><div class="t">10:20</div><div class="av b1" style="width:52px;height:52px;font-size:22px">会</div><div class="bub">刚才那份单价错了，用这版<br><span class="f">📄 11月台账_改.xlsx</span></div></div>
+   <div class="msg"><div class="t">11:40</div><div class="av b3" style="width:52px;height:52px;font-size:22px">销</div><div class="bub">我手上是哪一版？客户在问对账</div></div>
+   <div class="msg"><div class="t">14:10</div><div class="av b2" style="width:52px;height:52px;font-size:22px">老</div><div class="bub">报给我的数，怎么跟你们的对不上？</div></div>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;gap:22px">
+   <div class="card prob"><div class="n">1</div><div><h3>版本乱</h3><p>“最终版”“最终版 2”“真最终版”，有人拿旧数去汇报、去对账</p></div></div>
+   <div class="card prob"><div class="n">2</div><div><h3>重复劳动</h3><p>改一个数要重新导出、重新发、再挨个确认收到没有</p></div></div>
+   <div class="card prob"><div class="n">3</div><div><h3>数据到处飞</h3><p>文件散在每个人的微信、邮箱、U 盘里，转给谁了、离职带走了，都没人知道</p></div></div>
+  </div>
+ </div>
+ <div class="ft">© CreamViz by Alin</div>
+</div>
+
+<!-- 3 做法 -->
+<div class="s" id="s3">
+ <div class="hd"><span class="tag">做法</span><h1>用一台办公室电脑当“主机”</h1><p>数据只存在这台电脑上，同事用浏览器打开网址就能用</p></div>
+ <div style="display:flex;gap:30px;flex:1;align-items:stretch">
+  <div class="lan" style="flex:1;padding:54px 40px 34px;display:flex;flex-direction:column;gap:30px;align-items:center">
+   <div class="lab">公司局域网（办公室 WiFi / 网线）</div>
+   <div class="host" style="width:600px"><div style="font-size:48px">🖥️</div><h3>主机：一台日常办公电脑</h3><p>系统程序 + 数据库都在这里 · 每天自动备份</p></div>
+   <div style="font-size:30px;color:#8fa3df;font-weight:900;letter-spacing:40px">↙ ↓ ↘</div>
+   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:22px;width:100%">
+    <div class="dev"><div style="font-size:40px">💻</div><h4>老板的电脑</h4><code>192.168.1.8:8080</code></div>
+    <div class="dev"><div style="font-size:40px">💻</div><h4>销售的笔记本</h4><code>192.168.1.8:8080</code></div>
+    <div class="dev"><div style="font-size:40px">💻</div><h4>财务的电脑</h4><code>192.168.1.8:8080</code></div>
+   </div>
+  </div>
+  <div style="width:330px;display:flex;flex-direction:column;gap:22px;justify-content:center">
+   <div class="card" style="text-align:center;border:3px solid rgba(238,102,102,.4)"><div style="font-size:54px">☁️</div><div style="font-size:30px;font-weight:900;color:#c23d3d;margin-top:6px">互联网 / 云端</div><div style="font-size:23px;color:#4B5563;font-weight:700;margin-top:8px;line-height:1.5">数据不上传<br>不存在别人的服务器上</div></div>
+   <div class="card"><div style="font-size:26px;font-weight:900;color:#3f56a8">不用额外买</div><div style="font-size:22px;color:#4B5563;font-weight:700;margin-top:8px;line-height:1.6">服务器、机房、云账号<br>都不需要</div></div>
+  </div>
+ </div>
+ <div class="ft">© CreamViz by Alin</div>
+</div>
+
+<!-- 4 同步 -->
+<div class="s" id="s4">
+ <div class="hd"><span class="tag">改了就同步</span><h1>我这边一保存，同事那边就是新的</h1><p>不用再发文件，也不用问“你看的是哪一版”</p></div>
+ <div style="display:flex;gap:26px;align-items:center;flex:1">
+  <div class="card" style="flex:1">
+   <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><div class="av b1" style="width:56px;height:56px;font-size:24px">会</div><div style="font-size:28px;font-weight:900">会计（管理员）</div></div>
+   <div class="browser"><div class="bar"><div class="url" style="font-size:19px">192.168.1.8:8080 / 应收账款</div></div>
+    <div style="padding:18px;display:flex;flex-direction:column;gap:10px">
+     <div class="file" style="font-size:21px">星河科技 · 回款 <b style="margin-left:auto;color:#3f56a8">+86,000.00</b></div>
+     <div class="file" style="font-size:21px">云岭建设 · 回款 <b style="margin-left:auto;color:#3f56a8">+42,500.00</b></div>
+     <div style="align-self:flex-end;background:#5470c6;color:#fff;border-radius:12px;padding:12px 30px;font-size:24px;font-weight:900;box-shadow:0 0 0 6px rgba(84,112,198,.2)">保存</div></div></div>
+  </div>
+  <div class="arrow">→</div>
+  <div style="flex:1;display:flex;flex-direction:column;gap:22px">
+   <div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:12px"><div class="av b2" style="width:50px;height:50px;font-size:22px">老</div><div style="font-size:26px;font-weight:900">老板的电脑</div></div><div class="toast">数据已更新 <span>刚刚</span><span style="margin-left:auto;background:#5470c6;color:#fff">点击刷新</span></div></div>
+   <div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:12px"><div class="av b3" style="width:50px;height:50px;font-size:22px">销</div><div style="font-size:26px;font-weight:900">销售的笔记本</div></div><div class="toast">数据已更新 <span>刚刚</span><span style="margin-left:auto;background:#5470c6;color:#fff">点击刷新</span></div></div>
+  </div>
+ </div>
+ <div class="card" style="display:flex;justify-content:space-between;margin-bottom:20px"><div class="step"><b>1</b>会计修改数据</div><div class="step"><b>2</b>主机保存</div><div class="step"><b>3</b>同事页面提示更新</div><div class="step"><b>4</b>大家看到同一份数</div></div>
+ <div class="ft">© CreamViz by Alin</div>
+</div>
+
+<!-- 5 升级 -->
+<div class="s" id="s5">
+ <div class="hd"><span class="tag">功能升级</span><h1>系统升级，同事什么都不用装</h1><p>升级只在主机上做一次，其他人刷新页面就是新版本</p></div>
+ <div style="display:flex;gap:30px;flex:1">
+  <div class="card col" style="flex:1"><h2 style="color:#c23d3d">传统客户端软件</h2>
+   <div class="row"><div class="ic bad">1</div>每台电脑下载安装包</div>
+   <div class="row"><div class="ic bad">2</div>一台一台装、一台一台升级</div>
+   <div class="row"><div class="ic bad">3</div>有人没升级，还在用旧版</div>
+   <div class="row"><div class="ic bad">4</div>新同事来了，又要装一遍</div></div>
+  <div class="card col" style="flex:1;border:3px solid #5470c6"><h2 style="color:#3f56a8">网址方式</h2>
+   <div class="row"><div class="ic good">1</div>主机上一键升级</div>
+   <div class="row"><div class="ic good">2</div>同事刷新页面，自动是新版</div>
+   <div class="row"><div class="ic good">3</div>所有人永远是同一个版本</div>
+   <div class="row"><div class="ic good">4</div>新同事：发个网址就能用</div></div>
+ </div>
+ <div class="card" style="font-size:25px;font-weight:700;color:#4B5563;margin-bottom:20px">升级时下载的只是<b style="color:#3f56a8">程序</b>，公司的<b style="color:#3f56a8">数据一行都不会上传</b>。</div>
+ <div class="ft">© CreamViz by Alin</div>
+</div>
+
+<!-- 6 对比 -->
+<div class="s" id="s6">
+ <div class="hd"><span class="tag">对比</span><h1>和其他做法比一比</h1><p>小公司最常见的四种方式</p></div>
+ <div class="card" style="flex:1;padding:24px 30px">
+  <table><thead><tr><th style="width:26%">方式</th><th>花费</th><th>数据存在哪</th><th>大家看的是最新的吗</th><th>上手</th></tr></thead><tbody>
+   <tr><td>发 Excel 文件</td><td><span class="bd b">不花钱</span></td><td><span class="bd r">散在各人微信、邮箱</span></td><td><span class="bd r">经常不是</span></td><td><span class="bd b">简单</span></td></tr>
+   <tr><td>在线表格 / SaaS</td><td><span class="bd a">按人按年付费</span></td><td><span class="bd a">别人的云上</span></td><td><span class="bd b">是</span></td><td><span class="bd a">要学新系统</span></td></tr>
+   <tr><td>买服务器 + 定制系统</td><td><span class="bd r">几万起 + 维护费</span></td><td><span class="bd b">公司里</span></td><td><span class="bd b">是</span></td><td><span class="bd r">要有人维护</span></td></tr>
+   <tr class="hl"><td>局域网网址方式</td><td><span class="bd b">不用买服务器</span></td><td><span class="bd b">只在公司里</span></td><td><span class="bd b">是，改了就同步</span></td><td><span class="bd b">打开网址就用</span></td></tr>
+  </tbody></table>
+ </div>
+ <div class="ft">© CreamViz by Alin</div>
+</div>
+
+<!-- 7 边界 -->
+<div class="s" id="s7">
+ <div class="hd"><span class="tag">说清楚</span><h1>适合谁，也说清楚它的边界</h1><p>不夸大，用之前心里有数</p></div>
+ <div style="display:flex;gap:30px;flex:1">
+  <div class="card col" style="flex:1"><h2 style="color:#3f56a8">适合</h2>
+   <div class="row"><div class="ic good">✓</div>10～100 人的小公司、门店、工厂</div>
+   <div class="row"><div class="ic good">✓</div>数据在 Excel 里，要好几个人一起看</div>
+   <div class="row"><div class="ic good">✓</div>不想买服务器，也不想把数据放到云上</div>
+   <div class="row"><div class="ic good">✓</div>没有专职 IT</div></div>
+  <div class="card col" style="flex:1"><h2 style="color:#b06000">要知道的</h2>
+   <div class="row"><div class="ic mid">!</div>主机电脑要开着，关机时同事打不开</div>
+   <div class="row"><div class="ic mid">!</div>只在公司网络里能打开；在家访问要另外设置，默认不开</div>
+   <div class="row"><div class="ic mid">!</div>数据都在主机上，要定期备份一份到别处</div>
+   <div class="row"><div class="ic mid">!</div>适合几个人到几十人一起用，不是给上千人的大系统</div></div>
+ </div>
+ <div class="card" style="font-size:26px;font-weight:800;color:#1F2937;text-align:center;margin-bottom:20px">CreamViz 接下来的系统，都会按这个思路来做：<span style="color:#3f56a8">数据留在公司，网址打开就用</span></div>
+ <div class="ft">© CreamViz by Alin</div>
+</div>
+</body></html>
